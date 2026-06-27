@@ -92,7 +92,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('code-change', async ({ roomId, code, version }) => {
+  socket.on('code-change', async ({ roomId, code, version, sentAt }) => {
     console.log(`code-change from ${username}, version ${version}`);
 
     const room = await roomManager.getOrCreateRoom(roomId);
@@ -112,7 +112,7 @@ io.on('connection', (socket) => {
     const newVersion = roomManager.updateCode(roomId, code);
     const socketsInRoom = await io.in(roomId).fetchSockets();
     console.log(`broadcasting code-update to room ${roomId}, version ${newVersion}. Sockets in room: ${socketsInRoom.length}`);
-    socket.to(roomId).emit('code-update', { code, version: newVersion });
+    socket.to(roomId).emit('code-update', { code, version: newVersion, sentAt});
 
     if (roomManager.shouldAutoSave(roomId)) {
       await roomManager.saveToDb(roomId);

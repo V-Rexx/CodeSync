@@ -116,9 +116,12 @@ const Room = () => {
     });
 
     socket.on('code-update', ({ code, version }) => {
-      console.log('📨 code-update received', { codeLen: code?.length, version });
+      console.log('code-update received', { codeLen: code?.length, version });
       applyCode(code);
       versionRef.current = version;
+      if(sendAt){
+        (window.__lat ||= []).push(Date.now() - sentAt);
+      }
     });
 
     socket.on('language-update', ({ language }) => {
@@ -163,6 +166,7 @@ const Room = () => {
         roomId,
         code: value,
         version: versionRef.current,
+        sentAt: Date.now(),
       });
       versionRef.current += 1;
     });
