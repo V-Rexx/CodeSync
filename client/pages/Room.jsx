@@ -115,11 +115,11 @@ const Room = () => {
       setUsers(users);
     });
 
-    socket.on('code-update', ({ code, version }) => {
+    socket.on('code-update', ({ code, version, sentAt }) => {
       console.log('code-update received', { codeLen: code?.length, version });
       applyCode(code);
       versionRef.current = version;
-      if(sendAt){
+      if (sendAt){
         (window.__lat ||= []).push(Date.now() - sentAt);
       }
     });
