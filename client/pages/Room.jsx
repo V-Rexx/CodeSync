@@ -119,7 +119,7 @@ const Room = () => {
       console.log('code-update received', { codeLen: code?.length, version });
       applyCode(code);
       versionRef.current = version;
-      if (sendAt){
+      if (sentAt){
         (window.__lat ||= []).push(Date.now() - sentAt);
       }
     });
